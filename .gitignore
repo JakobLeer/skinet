@@ -1,5 +1,5 @@
 bin
 obj
 .vscode
-API/skinet.db
-/API/appsettings.json
+*.db
+appsettings.json
