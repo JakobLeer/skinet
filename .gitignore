@@ -2,3 +2,4 @@ bin
 obj
 .vscode
 API/skinet.db
+/API/appsettings.json
