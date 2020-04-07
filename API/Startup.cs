@@ -1,3 +1,5 @@
+using API.Helpers;
+using AutoMapper;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
@@ -24,6 +26,7 @@ namespace API
             services.AddControllers();
             services.AddDbContext<StoreContext>(options => options.UseSqlite(_config.GetConnectionString("Default")));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddAutoMapper(typeof(MappingProfiles));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
