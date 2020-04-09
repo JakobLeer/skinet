@@ -18,6 +18,14 @@ namespace Core.Specifications
         
         public int? BrandId { get; set; }
         public int? TypeId { get; set; }
+        
+        private string _name;
+
+        public string Name
+        {
+             get => _name;
+             set => _name = value.ToLower();
+        }
 
         public ProductWithBrandAndType.SortOptions Sort { get; set; } = ProductWithBrandAndType.SortOptions.NameAsc;
     }

@@ -1,3 +1,4 @@
+using System;
 using Core.Entities;
 
 namespace Core.Specifications
@@ -15,7 +16,8 @@ namespace Core.Specifications
         public ProductWithBrandAndType(ProductSpecParams productSpecParams)
             : base(p =>
                     (!productSpecParams.BrandId.HasValue || p.ProductBrandId == productSpecParams.BrandId) &&
-                    (!productSpecParams.TypeId.HasValue || p.ProductTypeId == productSpecParams.TypeId)
+                    (!productSpecParams.TypeId.HasValue || p.ProductTypeId == productSpecParams.TypeId) &&
+                    (string.IsNullOrWhiteSpace(productSpecParams.Name) || p.Name.ToLower().Contains(productSpecParams.Name))
             )
         {
             AddInclude(p => p.ProductBrand);
