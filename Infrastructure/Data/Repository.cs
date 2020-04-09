@@ -17,6 +17,13 @@ namespace Infrastructure.Data
             _context = context;
         }
 
+        public async Task<int> CountBySpecAsync(ISpecification<T> spec)
+        {
+            var query = ApplySpecification(spec);
+            var count = await query.CountAsync();
+            return count;
+        }
+
         public async Task<T> GetEntityByIdAsync(int id)
         {
             var item = await _context.Set<T>().FindAsync(id);
