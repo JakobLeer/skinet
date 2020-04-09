@@ -2,7 +2,7 @@ using Core.Entities;
 
 namespace Core.Specifications
 {
-    public class ProductWithBrandAndTypeSpecification : BaseSpecification<Product>
+    public class ProductWithBrandAndType : BaseSpecification<Product>
     {
         public enum SortOptions
         {
@@ -12,7 +12,7 @@ namespace Core.Specifications
             NameDesc,
         }
 
-        public ProductWithBrandAndTypeSpecification(SortOptions sort = SortOptions.NameAsc)
+        public ProductWithBrandAndType(SortOptions sort = SortOptions.NameAsc)
         {
             AddInclude(p => p.ProductBrand);
             AddInclude(p => p.ProductType);
@@ -34,7 +34,7 @@ namespace Core.Specifications
             }
         }
 
-        public ProductWithBrandAndTypeSpecification(int id)
+        public ProductWithBrandAndType(int id)
             : base(p => p.Id == id)
         {
             AddInclude(p => p.ProductBrand);
