@@ -32,11 +32,13 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ProductToReturnDto>>> GetProducts(ProductWithBrandAndType.SortOptions sort = ProductWithBrandAndType.SortOptions.NameAsc)
+        public async Task<ActionResult<List<ProductToReturnDto>>> GetProducts(
+            ProductWithBrandAndType.SortOptions sort = ProductWithBrandAndType.SortOptions.NameAsc,
+            int? brandId = null,
+            int? typeId = null)
         {
-            var spec = new ProductWithBrandAndType(sort);
+            var spec = new ProductWithBrandAndType(sort, brandId, typeId);
             var products = await _productRepo.ListBySpecAsync(spec);
-            // return Ok(products.Select(product => _mapper.Map<Product, ProductToReturnDto>(product)
             return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products));
         }
 

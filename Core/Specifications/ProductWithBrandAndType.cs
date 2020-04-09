@@ -12,7 +12,13 @@ namespace Core.Specifications
             NameDesc,
         }
 
-        public ProductWithBrandAndType(SortOptions sort = SortOptions.NameAsc)
+        public ProductWithBrandAndType(SortOptions sort = SortOptions.NameAsc,
+                                       int? brandId = null,
+                                       int? typeId = null)
+            : base(p =>
+                    (!brandId.HasValue || p.ProductBrandId == brandId) &&
+                    (!typeId.HasValue || p.ProductTypeId == typeId)
+            )
         {
             AddInclude(p => p.ProductBrand);
             AddInclude(p => p.ProductType);
