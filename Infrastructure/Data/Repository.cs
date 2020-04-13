@@ -50,6 +50,13 @@ namespace Infrastructure.Data
             return list;
         }
 
+        public IReadOnlyList<T> ListBySpec(ISpecification<T> spec)
+        {
+            var query = ApplySpecification(spec);
+            var list = query.ToList();
+            return list;
+        }
+
         private IQueryable<T> ApplySpecification(ISpecification<T> spec)
         {
             var query = _context.Set<T>().AsQueryable();
