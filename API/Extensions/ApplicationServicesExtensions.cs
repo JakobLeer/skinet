@@ -12,6 +12,7 @@ namespace API.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<IBasketRepository, BasketRepository>();
 
             services.Configure<ApiBehaviorOptions>(options =>
                 {
@@ -21,7 +22,7 @@ namespace API.Extensions
                                         .Where (m => m.Value.Errors.Count > 0)
                                         .SelectMany(m => m.Value.Errors)
                                         .Select(e => e.ErrorMessage).ToArray();
-                        
+
                         var validationError = new ApiValidationError()
                         {
                             Errors = errors
