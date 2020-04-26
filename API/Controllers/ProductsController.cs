@@ -33,7 +33,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ProductToReturnDto>>> GetProducts([FromQuery] ProductSpecParams productSpecParams)
+        public async Task<ActionResult<Paginator<ProductToReturnDto>>> GetProducts([FromQuery] ProductSpecParams productSpecParams)
         {
             var products = await _productRepo.ListBySpecAsync(new ProductWithBrandAndType(productSpecParams));
             int count = await _productRepo.CountBySpecAsync(new ProductCount(productSpecParams));
