@@ -7,7 +7,8 @@ namespace Core.Specifications
         public ProductCount(ProductSpecParams productSpecParams)
             : base(p =>
                     (!productSpecParams.BrandId.HasValue || p.ProductBrandId == productSpecParams.BrandId) &&
-                    (!productSpecParams.TypeId.HasValue || p.ProductTypeId == productSpecParams.TypeId)
+                    (!productSpecParams.TypeId.HasValue || p.ProductTypeId == productSpecParams.TypeId) &&
+                    (string.IsNullOrWhiteSpace(productSpecParams.Name) || p.Name.ToLower().Contains(productSpecParams.Name))
             )
         {
         }
