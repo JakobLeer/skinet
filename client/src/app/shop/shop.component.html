@@ -4,30 +4,22 @@
         <section class="col-3">
             <h5 class="text-warning ml-3">Sort</h5>
             <select class="custom-select my-3" (change)="onSortSelected($event.target.value)">
-                <option *ngFor="let sortOption of sortOptions"
-                    [value]="sortOption.value"
-                >
+                <option *ngFor="let sortOption of sortOptions" [value]="sortOption.value">
                     {{sortOption.name}}
                 </option>
             </select>
             <h5 class="text-warning ml-3">Brands</h5>
             <div class="list-group my-3">
-                <a href="#" class="list-group-item"
-                    *ngFor="let brand of brands"
-                    [class.active]="brand.id === brandIdSelected"
-                    (click)="onBrandSelected(brand.id)"
-                >
+                <a href="#" class="list-group-item" *ngFor="let brand of brands"
+                    [class.active]="brand.id === shopParams.brandId" (click)="onBrandSelected(brand.id)">
                     {{brand.name}}
                 </a>
             </div>
             <h5 class="text-warning ml-3">Types</h5>
             <div class="list-group my-3">
-                <a href="#" class="list-group-item"
-                    *ngFor="let productType of productTypes"
-                    [class.active]="productType.id === this.typeIdSelected"
-                    (click)="onTypeSelected(productType.id)"
-                    style="cursor: pointer;"
-                >
+                <a href="#" class="list-group-item" *ngFor="let productType of productTypes"
+                    [class.active]="productType.id === shopParams.typeId" (click)="onTypeSelected(productType.id)"
+                    style="cursor: pointer;">
                     {{productType.name}}
                 </a>
             </div>
@@ -35,9 +27,7 @@
 
         <section class="col-9">
             <div class="d-flex justify-content-between align-items-center pb2">
-                <header>
-                    <span>Showing <strong>5</strong> of <strong>16</strong> results</span>
-                </header>
+                <app-pagination-header [pagination]="pagination"></app-pagination-header>
                 <div class="form-inline mt-2">
                     <input type="text" class="form-control mr-2" style="width: 300px" placeholder="Search">
                     <button class="btn btn-outline-primary my-2">Search</button>
@@ -49,6 +39,7 @@
                     <app-product-item [product]="product"></app-product-item>
                 </div>
             </div>
+            <app-paginator [pagination]="pagination" (pageIndexChanged)="onPageIndexChanged($event)"></app-paginator>
         </section>
     </div>
 </div>

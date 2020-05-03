@@ -1,0 +1,16 @@
+<header>
+    <span *ngIf="pagination && pagination.count && pagination.count > 0;else noProductsFound">
+        Showing 
+        <strong>
+            {{
+                ((pagination.pageIndex - 1) * pagination.pageSize) + 1
+            }}
+            -
+            {{
+                pagination.pageIndex * pagination.pageSize < pagination.count ?
+                pagination.pageIndex * pagination.pageSize : pagination.count
+            }}
+        </strong> of <strong>{{pagination.count}}</strong> results
+    </span>
+    <ng-template #noProductsFound>No matching products</ng-template>
+</header>
