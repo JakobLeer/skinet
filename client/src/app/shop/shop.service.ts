@@ -1,5 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map } from 'rxjs/operators';
 
 import { Brand } from 'src/app/shared/Models/Brand';
 import { Pagination } from 'src/app/shared/Models/Pagination';
@@ -13,8 +14,25 @@ export class ShopService {
 
   constructor(private http: HttpClient) {}
 
-  getProducts() {
-    return this.http.get<Pagination>(`${this.baseUrl}/products?pageSize=50`);
+  getProducts(brandId?: number, typeId?: number, sortOption?: string) {
+    let params = new HttpParams();
+
+    if (brandId) {
+      params = params.append('brandId', brandId.toString());
+    }
+
+    if (typeId) {
+      params = params.append('typeId', typeId.toString());
+    }
+
+    if (sortOption) {
+      params = params.append('sort', sortOption);
+    }
+
+    return this.http.get<Pagination>(`${this.baseUrl}/products`, {observe: 'response', params})
+            .pipe(
+              map(response => response.body)
+            );
   }
 
   getBrands() {
