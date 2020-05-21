@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 
 import { Brand } from 'src/app/shared/Models/Brand';
+import { environment } from 'src/environments/environment';
 import { Pagination } from 'src/app/shared/Models/Pagination';
 import { Product } from '../shared/Models/Products';
 import { ProductType } from 'src/app/shared/Models/ProductType';
@@ -12,7 +13,7 @@ import { ShopParams } from './models/productsParams';
   providedIn: 'root',
 })
 export class ShopService {
-  baseUrl = 'https://localhost:5001/api';
+  baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
