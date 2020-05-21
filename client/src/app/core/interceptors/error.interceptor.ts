@@ -25,7 +25,13 @@ export class ErrorInterceptor implements HttpInterceptor {
       catchError((error) => {
         if (error) {
             if (error.status === 400) {
-                this.toastr.error(error.error.message, error.error.statusCode);
+                if (error.error.errors) {
+                    // We have some error messages we'd like the sending form to take care of.
+                    throw error.error;
+                }
+                else {
+                    this.toastr.error(error.error.message, error.error.statusCode);
+                }
             }
             if (error.status === 401) {
                 this.toastr.error(error.error.message, error.error.statusCode);
