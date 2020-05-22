@@ -7,6 +7,7 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { TestErrorComponent } from './test-error/test-error.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { ServerErrorComponent } from './server-error/server-error.component';
+import { SectionHeaderComponent } from './section-header/section-header.component';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { ServerErrorComponent } from './server-error/server-error.component';
     NavBarComponent,
     TestErrorComponent,
     NotFoundComponent,
-    ServerErrorComponent
+    ServerErrorComponent,
+    SectionHeaderComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +27,8 @@ import { ServerErrorComponent } from './server-error/server-error.component';
     })
   ],
   exports: [
-    NavBarComponent
+    NavBarComponent,
+    SectionHeaderComponent
   ]
 })
 export class CoreModule { }
