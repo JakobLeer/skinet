@@ -1,3 +1,4 @@
+import { BreadcrumbModule } from 'xng-breadcrumb';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -19,6 +20,7 @@ import { SectionHeaderComponent } from './section-header/section-header.componen
     SectionHeaderComponent
   ],
   imports: [
+    BreadcrumbModule,
     CommonModule,
     RouterModule,
     ToastrModule.forRoot({

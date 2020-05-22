@@ -9,27 +9,42 @@ import { TestErrorComponent } from './core/test-error/test-error.component';
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent
+    component: HomeComponent,
+    data: {
+      breadcrumb: 'Home'
+    }
   },
   {
     path: 'test-errors',
-    component: TestErrorComponent
+    component: TestErrorComponent,
+    data: {
+      breadcrumb: 'Test Errors'
+    }
   },
   {
     path: 'server-error',
-    component: ServerErrorComponent
+    component: ServerErrorComponent,
+    data: {
+      breadcrumb: 'Server Error'
+    }
   },
   {
     path: 'not-found',
-    component: NotFoundComponent
+    component: NotFoundComponent,
+    data: {
+      breadcrumb: 'Not Found Error'
+    }
   },
   {
     path: 'shop',
-    loadChildren: () => import('./shop/shop.module').then(mod => mod.ShopModule)
+    loadChildren: () => import('./shop/shop.module').then(mod => mod.ShopModule),
+    data: {
+      breadcrumb: 'Shop'
+    }
   },
   {
     path: '**',
-    redirectTo: '',
+    redirectTo: 'not-found',
     pathMatch: 'full'
   }
 ];
