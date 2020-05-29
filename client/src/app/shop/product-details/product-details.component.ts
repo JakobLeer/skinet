@@ -1,7 +1,8 @@
 import { ActivatedRoute } from '@angular/router';
 import { BreadcrumbService } from 'xng-breadcrumb';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
+import { BasketService } from './../../basket/basket.service';
 import { Product } from 'src/app/shared/Models/Products';
 import { ShopService } from './../shop.service';
 
@@ -16,7 +17,8 @@ export class ProductDetailsComponent implements OnInit {
   constructor(
     private shopService: ShopService,
     private activatedRoute: ActivatedRoute,
-    private breadcrumbService: BreadcrumbService
+    private breadcrumbService: BreadcrumbService,
+    private basketService: BasketService
   ) {
     this.breadcrumbService.set('@productDetails', '');
   }
@@ -35,4 +37,7 @@ export class ProductDetailsComponent implements OnInit {
     }
   }
 
+  addItemToBasket() {
+    this.basketService.addItemToBasket(this.product, 1);
+  }
 }
