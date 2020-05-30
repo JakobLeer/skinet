@@ -5,40 +5,47 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
-import { IBasket, IBasketItem, Basket } from '../shared/Models/basket';
+import {
+  IBasket,
+  IBasketItem,
+  Basket,
+  BasketTotals,
+} from '../shared/Models/basket';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BasketService {
   private basketSource = new BehaviorSubject<IBasket>(null);
+  private basketTotalsSource = new BehaviorSubject<BasketTotals>(null);
 
-  baseUrl = environment.apiUrl;
-  basket$ = this.basketSource.asObservable();
   readonly basketId = 'basket_id';
+  baseUrl = environment.apiUrl;
+
+  basket$ = this.basketSource.asObservable();
+  basketTotals$ = this.basketTotalsSource.asObservable();
 
   constructor(private http: HttpClient) {}
 
   getBasket(id: string) {
-    return this.http.get<IBasket>(`${this.baseUrl}/basket?id=${id}`)
-      .pipe(
-        map(basket => {
-          this.basketSource.next(basket);
-          console.log('BasketService.getBasket:');
-          console.log(basket);
-        })
-      );
+    return this.http.get<IBasket>(`${this.baseUrl}/basket?id=${id}`).pipe(
+      map((basket) => {
+        this.basketSource.next(basket);
+        this.calculateTotals();
+      })
+    );
   }
 
   setBasket(basket: IBasket) {
-    this.http.post<IBasket>(`${this.baseUrl}/basket`, basket)
-        .subscribe(response => {
-          this.basketSource.next(response);
-          console.log('BasketService.setBasket:');
-          console.log(response);
-        }, error => {
-          console.log(error);
-        });
+    this.http.post<IBasket>(`${this.baseUrl}/basket`, basket).subscribe(
+      (response) => {
+        this.basketSource.next(response);
+        this.calculateTotals();
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   getCurrentBasket() {
@@ -52,13 +59,29 @@ export class BasketService {
     this.setBasket(basket);
   }
 
-  private addOrUpdateItem(items: IBasketItem[], basketItemToAdd: IBasketItem): IBasketItem[] {
-    const index = items.findIndex(item => item.id === basketItemToAdd.id);
+  private calculateTotals() {
+    const basket = this.getCurrentBasket();
+    const shipping = 0;
+    const subtotal = basket.items.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+    this.basketTotalsSource.next({
+      shipping,
+      subtotal,
+      total: shipping + subtotal,
+    });
+  }
+
+  private addOrUpdateItem(
+    items: IBasketItem[],
+    basketItemToAdd: IBasketItem
+  ): IBasketItem[] {
+    const index = items.findIndex((item) => item.id === basketItemToAdd.id);
 
     if (index === -1) {
       items.push(basketItemToAdd);
-    }
-    else {
+    } else {
       items[index].quantity += basketItemToAdd.quantity;
     }
 
@@ -71,7 +94,10 @@ export class BasketService {
     return basket;
   }
 
-  private mapProductToBasketItem(product: Product, quantity: number): IBasketItem {
+  private mapProductToBasketItem(
+    product: Product,
+    quantity: number
+  ): IBasketItem {
     return {
       id: product.id,
       productName: product.name,
@@ -79,7 +105,7 @@ export class BasketService {
       quantity,
       pictureUrl: product.pictureUrl,
       brand: product.productBrand,
-      type: product.productType
+      type: product.productType,
     };
   }
 }
