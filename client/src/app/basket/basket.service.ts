@@ -24,6 +24,8 @@ export class BasketService {
       .pipe(
         map(basket => {
           this.basketSource.next(basket);
+          console.log('BasketService.getBasket:');
+          console.log(basket);
         })
       );
   }
@@ -32,6 +34,7 @@ export class BasketService {
     this.http.post<IBasket>(`${this.baseUrl}/basket`, basket)
         .subscribe(response => {
           this.basketSource.next(response);
+          console.log('BasketService.setBasket:');
           console.log(response);
         }, error => {
           console.log(error);
