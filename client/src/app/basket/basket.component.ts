@@ -17,4 +17,16 @@ export class BasketComponent implements OnInit {
   ngOnInit(): void {
     this.basket$ = this.basketService.basket$;
   }
+
+  removeBasketItem(id: number) {
+    this.basketService.removeBasketItem(id);
+  }
+
+  decreaseQuantity(id: number) {
+    this.basketService.decreaseQuantity(id);
+  }
+
+  increaseQuantity(id: number) {
+    this.basketService.increaseQuantity(id);
+  }
 }

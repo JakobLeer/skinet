@@ -59,6 +59,40 @@ export class BasketService {
     this.setBasket(basket);
   }
 
+  decreaseQuantity(id: number) {
+    this.changeQuantity(id, -1);
+  }
+
+  increaseQuantity(id: number) {
+    this.changeQuantity(id, 1);
+  }
+
+  changeQuantity(id: number, delta: number) {
+    const basket = this.getCurrentBasket();
+    const index = basket.items.findIndex((item) => item.id === id);
+
+    if (index !== -1) {
+      const basketItem = basket.items[index];
+
+      if (basketItem.quantity + delta <= 0) {
+        this.removeBasketItem(id);
+      } else {
+        basketItem.quantity = basketItem.quantity + delta;
+      }
+    }
+    this.setBasket(basket);
+  }
+
+  removeBasketItem(id: number) {
+    const basket = this.getCurrentBasket();
+    const index = basket.items.findIndex((item) => item.id === id);
+
+    if (index !== -1) {
+      basket.items.splice(index, 1);
+      this.setBasket(basket);
+    }
+  }
+
   private calculateTotals() {
     const basket = this.getCurrentBasket();
     const shipping = 0;

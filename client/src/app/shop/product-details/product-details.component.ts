@@ -13,6 +13,7 @@ import { ShopService } from './../shop.service';
 })
 export class ProductDetailsComponent implements OnInit {
   product: Product;
+  quantity = 1;
 
   constructor(
     private shopService: ShopService,
@@ -38,6 +39,16 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   addItemToBasket() {
-    this.basketService.addItemToBasket(this.product, 1);
+    this.basketService.addItemToBasket(this.product, this.quantity);
+  }
+
+  increaseQuantity() {
+    this.quantity++;
+  }
+
+  decreaseQuantity() {
+    if (this.quantity > 1) {
+      this.quantity--;
+    }
   }
 }
