@@ -28,7 +28,6 @@ namespace API.Helpers
         /// </summary>
         public int Count { get; set; }
 
-
         /// <summary>
         /// The entities on the page returned
         /// </summary>

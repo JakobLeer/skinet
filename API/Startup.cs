@@ -28,7 +28,7 @@ namespace API
             services.AddDbContext<StoreContext>(options => options.UseSqlite(_config.GetConnectionString("Default")));
             services.AddAutoMapper(typeof(MappingProfiles));
 
-            services.AddSingleton<IConnectionMultiplexer>(c => {
+            services.AddSingleton<IConnectionMultiplexer>(_ => {
                 var configuration = ConfigurationOptions.Parse(_config.GetConnectionString("Redis"), true);
                 return ConnectionMultiplexer.Connect(configuration);
             });
@@ -36,13 +36,10 @@ namespace API
             services.AddApplicationServices();
             services.AddSwaggerDocumentation();
             services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy", policy =>
                 {
-                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+                    options.AddPolicy("CorsPolicy", policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200")
+                    );
                 }
-                );
-            }
             );
         }
 
@@ -62,10 +59,7 @@ namespace API
 
             app.UseSwaggerDocumentation();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }

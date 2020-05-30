@@ -35,8 +35,8 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<Paginator<ProductToReturnDto>>> GetProducts([FromQuery] ProductSpecParams productSpecParams)
         {
-            var products = await _productRepo.ListBySpecAsync(new ProductWithBrandAndType(productSpecParams));
-            int count = await _productRepo.CountBySpecAsync(new ProductCount(productSpecParams));
+            var products = await _productRepo.ListBySpecAsync(new ProductWithBrandAndType(productSpecParams)).ConfigureAwait(false);
+            int count = await _productRepo.CountBySpecAsync(new ProductCount(productSpecParams)).ConfigureAwait(false);
             var dtos = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products);
             var paginatedList = new Paginator<ProductToReturnDto>(
                 productSpecParams.PageIndex,
@@ -52,7 +52,7 @@ namespace API.Controllers
         public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
         {
             var spec = new ProductWithBrandAndType(id);
-            var product = await _productRepo.GetEntityBySpecAsync(spec);
+            var product = await _productRepo.GetEntityBySpecAsync(spec).ConfigureAwait(false);
 
             if (product == null) return NotFound(new ApiResponse((int)HttpStatusCode.NotFound));
 
@@ -63,14 +63,14 @@ namespace API.Controllers
         [HttpGet("brands")]
         public async Task<ActionResult<List<ProductBrand>>> GetProductBrands()
         {
-            var brands = await _productBrandRepo.ListAllAsync();
+            var brands = await _productBrandRepo.ListAllAsync().ConfigureAwait(false);
             return Ok(brands);
         }
 
         [HttpGet("types")]
         public async Task<ActionResult<List<ProductType>>> GetProductTypes()
         {
-            var types = await _productTypeRepo.ListAllAsync();
+            var types = await _productTypeRepo.ListAllAsync().ConfigureAwait(false);
             return Ok(types);
         }
     }

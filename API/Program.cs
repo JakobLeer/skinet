@@ -21,8 +21,8 @@ namespace API
                 try
                 {
                     var dbContext = services.GetRequiredService<StoreContext>();
-                    await dbContext.Database.MigrateAsync();
-                    await StoreContextSeed.SeedAsync(dbContext, loggerFactory);
+                    await dbContext.Database.MigrateAsync().ConfigureAwait(false);
+                    await StoreContextSeed.SeedAsync(dbContext, loggerFactory).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -35,9 +35,6 @@ namespace API
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
     }
 }

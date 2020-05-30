@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
-    public class SpecificationEvaluator<TEntity> where TEntity : BaseEntity
+    public static class SpecificationEvaluator<TEntity> where TEntity : BaseEntity
     {
         public static IQueryable<TEntity> Evaluate(IQueryable<TEntity> inputQuery, ISpecification<TEntity> spec)
         {
@@ -31,11 +31,9 @@ namespace Infrastructure.Data
                 query = query.Skip(spec.Skip).Take(spec.Take);
             }
 
-            query = spec.Includes.Aggregate(
+            return spec.Includes.Aggregate(
                 query,
                 (queryWithInclude, include) => queryWithInclude.Include(include));
-
-            return query;
         }
     }
 }

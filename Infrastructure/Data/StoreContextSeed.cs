@@ -25,7 +25,7 @@ namespace Infrastructure.Data
                         context.ProductBrands.Add(brand);
                     }
 
-                    await context.SaveChangesAsync();
+                    await context.SaveChangesAsync().ConfigureAwait(false);
                 }
 
                 if (!context.ProductTypes.Any())
@@ -38,7 +38,7 @@ namespace Infrastructure.Data
                         context.ProductTypes.Add(type);
                     }
 
-                    await context.SaveChangesAsync();
+                    await context.SaveChangesAsync().ConfigureAwait(false);
                 }
 
                 if (!context.Products.Any())
@@ -51,7 +51,7 @@ namespace Infrastructure.Data
                         context.Products.Add(product);
                     }
 
-                    await context.SaveChangesAsync();
+                    await context.SaveChangesAsync().ConfigureAwait(false);
                 }
             }
             catch (Exception ex)

@@ -17,7 +17,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<CustomerBasket>> GetBasketById(string id)
         {
-            var basket = await _basketRepository.GetBasketAsync(id);
+            var basket = await _basketRepository.GetBasketAsync(id).ConfigureAwait(false);
 
             return Ok(basket ?? new CustomerBasket(id));
         }
@@ -25,7 +25,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<CustomerBasket>> UpdateBasket(CustomerBasket basket)
         {
-            var newBasket = await _basketRepository.CreateOrUpdateBasketAsync(basket);
+            var newBasket = await _basketRepository.CreateOrUpdateBasketAsync(basket).ConfigureAwait(false);
 
             return Ok(newBasket);
         }
@@ -33,7 +33,7 @@ namespace API.Controllers
         [HttpDelete]
         public async Task DeleteBasketAsync(string id)
         {
-            await _basketRepository.DeleteBasketAsync(id);
+            await _basketRepository.DeleteBasketAsync(id).ConfigureAwait(false);
         }
     }
 }
