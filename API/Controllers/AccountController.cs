@@ -50,9 +50,7 @@ namespace API.Controllers
         [HttpGet("emailexists")]
         public async Task<ActionResult<bool>> CheckIfEmailExists([FromQuery] string email)
         {
-            var user = await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
-
-            return Ok(user != null);
+            return Ok(await CheckIfEmailExistsAsync(email).ConfigureAwait(false));
         }
 
         [Authorize]
@@ -116,6 +114,18 @@ namespace API.Controllers
                 UserName = registerDto.Email,
             };
 
+            bool emailTaken = await CheckIfEmailExistsAsync(registerDto.Email).ConfigureAwait(false);
+
+            if (emailTaken)
+            {
+                var errorResponse = new ApiValidationError
+                {
+                    Errors = new [] { "Email address is in use. "}
+                };
+
+                return new BadRequestObjectResult(errorResponse);
+            }
+
             var result = await _userManager.CreateAsync(user, registerDto.Password).ConfigureAwait(false);
 
             if (!result.Succeeded)
@@ -131,6 +141,12 @@ namespace API.Controllers
             };
 
             return Ok(registerResponse);
+        }
+
+        private async Task<bool> CheckIfEmailExistsAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
+            return user != null;
         }
     }
 }
