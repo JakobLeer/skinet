@@ -1,8 +1,13 @@
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Dtos;
 using API.Errors;
+using API.Extensions;
+using AutoMapper;
 using Core.Entities.Identity;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,14 +18,65 @@ namespace API.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ITokenService _tokenService;
+        private readonly IMapper _mapper;
 
         public AccountController(UserManager<AppUser> userManager,
                                  SignInManager<AppUser> signInManager,
-                                 ITokenService tokenService)
+                                 ITokenService tokenService,
+                                 IMapper mapper)
         {
             _tokenService = tokenService;
             _userManager = userManager;
             _signInManager = signInManager;
+            _mapper = mapper;
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<UserDto>> GetUserInfoByToken()
+        {
+            var user = await _userManager.FindByClaimsPrincipal(HttpContext.User).ConfigureAwait(false);
+
+            var loginResponse = new UserDto
+            {
+                Email = user.Email,
+                Token = _tokenService.CreateToken(user),
+                DisplayName = user.DisplayName
+            };
+
+            return Ok(loginResponse);
+        }
+
+        [HttpGet("emailexists")]
+        public async Task<ActionResult<bool>> CheckIfEmailExists([FromQuery] string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
+
+            return Ok(user != null);
+        }
+
+        [Authorize]
+        [HttpGet("address")]
+        public async Task<ActionResult<AddressDto>> GetUserAddress()
+        {
+            var user = await _userManager.FindByClaimsPrincipalWithAddressAsync(HttpContext.User).ConfigureAwait(false);
+
+            var addressDto = _mapper.Map<Address, AddressDto>(user?.Address);
+            return Ok(addressDto);
+        }
+
+        [Authorize]
+        [HttpPut("address")]
+        public async Task<ActionResult<AddressDto>> UpdateUserAddress(AddressDto addressDto)
+        {
+            var  user = await _userManager.FindByClaimsPrincipalWithAddressAsync(HttpContext.User).ConfigureAwait(false);
+
+            user.Address = _mapper.Map<AddressDto, Address>(addressDto);
+            var result = await _userManager.UpdateAsync(user).ConfigureAwait(false);
+
+            if (result.Succeeded) return Ok(addressDto);
+
+            return BadRequest("Problem updating the user's address");
         }
 
         [HttpPost("login")]
