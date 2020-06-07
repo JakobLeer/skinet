@@ -11,7 +11,7 @@ namespace Core.Interfaces
         /// Gets the entity with the id given.
         /// </summary>
         /// <returns>An entity or null if none exists with the id given</returns>
-        Task<T> GetEntityByIdAsync(int id);
+        Task<T> GetByIdAsync(int id);
 
         Task<IReadOnlyList<T>> ListAllAsync();
 
@@ -20,7 +20,7 @@ namespace Core.Interfaces
         /// </summary>
         /// <param name="spec">A specification with criteria.</param>
         /// <returns>The first entity that matches the criteria in the sspecification, null if none match.</returns>
-        Task<T> GetEntityBySpecAsync(ISpecification<T> spec);
+        Task<T> GetBySpecAsync(ISpecification<T> spec);
 
         Task<IReadOnlyList<T>> ListBySpecAsync(ISpecification<T> spec);
 

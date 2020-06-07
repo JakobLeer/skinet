@@ -24,13 +24,13 @@ namespace Infrastructure.Data
             return count;
         }
 
-        public async Task<T> GetEntityByIdAsync(int id)
+        public async Task<T> GetByIdAsync(int id)
         {
             var item = await _context.Set<T>().FindAsync(id).ConfigureAwait(false);
             return item;
         }
 
-        public async Task<T> GetEntityBySpecAsync(ISpecification<T> spec)
+        public async Task<T> GetBySpecAsync(ISpecification<T> spec)
         {
             var query = ApplySpecification(spec);
             T entity = await query.FirstOrDefaultAsync().ConfigureAwait(false);
