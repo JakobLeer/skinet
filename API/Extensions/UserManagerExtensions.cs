@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Core.Entities.Identity;
@@ -13,7 +12,7 @@ namespace API.Extensions
             this UserManager<AppUser> userManager,
             ClaimsPrincipal user)
         {
-            var email = user?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var email = user?.GetEmail();
             var appUser = await userManager.Users.Include(u => u.Address).SingleOrDefaultAsync(u => u.Email == email).ConfigureAwait(false);
             return appUser;
         }
@@ -22,7 +21,7 @@ namespace API.Extensions
             this UserManager<AppUser> userManager,
             ClaimsPrincipal user)
         {
-            var email = user?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var email = user?.GetEmail();
             var appUser = await userManager.Users.SingleOrDefaultAsync(u => u.Email == email).ConfigureAwait(false);
             return appUser;
         }
