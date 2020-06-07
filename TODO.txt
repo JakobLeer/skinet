@@ -1,0 +1,11 @@
+TODO
+- AutoMapper
+- Middleware, exception handling
+- Extensions
+
+- Commit
+API: Various validation approaches
+
+- Annotate DTOs
+  - [Required]
+  - [RegularExpression] - also check http://regexlib.com/
