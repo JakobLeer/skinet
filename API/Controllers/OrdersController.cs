@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.Dtos;
 using API.Errors;
@@ -37,6 +38,39 @@ namespace API.Controllers
 
             if (order == null) return BadRequest(new ApiResponse(400, "Problem creating an order"));
             return Ok(order);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IReadOnlyList<Order>>> GetOrdersForUser()
+        {
+            string buyerEmail = HttpContext.User.GetEmail();
+
+            var userOrders = await _orderService.GetOrdersForUserAsync(buyerEmail).ConfigureAwait(false);
+
+            return Ok(userOrders);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Order>> GetOrderById(int id)
+        {
+            string buyerEmail = HttpContext.User.GetEmail();
+
+            var order = await _orderService.GetOrderByIdAsync(id, buyerEmail).ConfigureAwait(false);
+
+            if (order == null)
+            {
+                return NotFound(new ApiResponse(404));
+            }
+
+            return Ok(order);
+        }
+
+        [HttpGet("deliveryMethods")]
+        public async Task<ActionResult<IReadOnlyList<DeliveryMethod>>> GetDeliveryMethods()
+        {
+            var deliveryMethods = await _orderService.GetDeliveryMethodsAsync().ConfigureAwait(false);
+
+            return Ok(deliveryMethods);
         }
     }
 }
